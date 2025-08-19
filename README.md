@@ -44,8 +44,8 @@ This repository contains an automated attendance tracking system implemented usi
 - Markdown for attendance record formatting
 
 ## Example Attendance Entry
-|User	|Date	|Log-In |Time	|Log-Out |Time	|Work Hours|
-|-----|------|------|------|-------|-------|---------|
+|User	|Date	|Log-In |Time	|Log-Out Time	|Work Hours|
+|-----|------|------|-------------|-------|---------|
 |JohnDoe	|2025-08-19|	09:00|	17:00|	08:00|
 
 ## Contributing
