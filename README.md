@@ -51,5 +51,5 @@ This repository contains an automated attendance tracking system implemented usi
 ## Contributing
 - Contributions and improvements are welcome! Feel free to open issues or pull requests to enhance the system.
 
-** Author **
+**Author**
 Ganesh
