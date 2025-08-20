@@ -77,21 +77,12 @@ jobs:
           git commit -m "Save login time for ${{ steps.get_timestamp.outputs.final_date }}" || echo "No changes to commit"
           git push
 
-      - name: Execute Python script with environment variable
-        id: run_script 
-        if: steps.check_command.outputs.command == 'login' || steps.check_command.outputs.command == 'logout'
-        env:
-          MY_VARIABLE: "Hello from GitHub Actions!"
-          LOGIN_TIME: ${{ steps.save_login.outputs.login_time }}
-          FIRST_NAME: ${{ steps.check_command.outputs.first_name }}
-          FINAL_DATE: ${{ steps.get_timestamp.outputs.final_date }}
-        run: python scripts/my_script.py
-
 #        run: |
 #          echo "login_time=${{ steps.get_timestamp.outputs.timestamp }}" >> $GITHUB_OUTPUT
 #          echo "Saved"
 
       - name: Read login time from file
+        id: read_login_and_logout
         if: steps.check_command.outputs.command == 'logout'
         env:
           LOGIN_TIME: ${{ steps.save_login.outputs.login_time }}
@@ -99,6 +90,7 @@ jobs:
           FIRST_NAME: ${{ steps.check_command.outputs.first_name }}
           FINAL_DATE: ${{ steps.get_timestamp.outputs.final_date }}
         run: |
+          echo "logout_time=${{ steps.get_timestamp.outputs.timestamp }}" >> $GITHUB_OUTPUT
           cat test/login_time.txt
           IFS='|' read -r LOGIN_USER LOGIN_DATE LOGIN_TIME < test/login_time.txt
           LOGOUT_TIME=${{ steps.get_timestamp.outputs.timestamp }}
@@ -112,6 +104,17 @@ jobs:
           git commit -m "Added attendance for ${{ steps.get_timestamp.outputs.final_date }}" || echo "No changes to commit"
           git push
           git pull origin master
+
+      - name: Execute Python script with environment variable
+        id: run_script 
+        if: steps.check_command.outputs.command == 'login' || steps.check_command.outputs.command == 'logout'
+        env:
+          MY_VARIABLE: "Hello from GitHub Actions!"
+          LOGIN_TIME: ${{ steps.save_login.outputs.login_time }}
+          LOGOUT_TIME: ${{ steps.read_login_and_logout.outputs.logout_time }}
+          FIRST_NAME: ${{ steps.check_command.outputs.first_name }}
+          FINAL_DATE: ${{ steps.get_timestamp.outputs.final_date }}
+        run: python scripts/my_script.py
 
 
 #      - name: Write to attendance.md at logout
