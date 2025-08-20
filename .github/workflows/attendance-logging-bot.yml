@@ -28,14 +28,11 @@ jobs:
 
       - name: Post login comment
         if: contains(github.event.comment.body, '/login')
-        env:
-          COMMENT_BODY: ${{ github.event.comment.body }}
-          USER_LOGIN: ${{ github.event.comment.user.login }}
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            Good Morning @${USER_LOGIN}! 😊 Your login has been recorded at ${{ steps.get_essentials.outputs.timestamp }}.
+            Good Morning @${{ github.event.comment.user.login }}! 😊 Your login has been recorded at ${{ steps.get_essentials.outputs.timestamp }}.
 
       - name: Post logout comment
         if: contains(github.event.comment.body, '/logout')
@@ -43,7 +40,7 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            See You Tomorrow, @${USER_LOGIN}! 😉 Your logout has been recorded at ${{ steps.get_essentials.outputs.timestamp }}.
+            See You Tomorrow, @${{ github.event.comment.user.login }}! 😉 Your logout has been recorded at ${{ steps.get_essentials.outputs.timestamp }}.
 
       - name: Get formatted date
         id: get_timestamp
