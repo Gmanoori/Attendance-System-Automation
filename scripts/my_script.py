@@ -23,8 +23,7 @@ if '/login' in comment_body:
     # Save login to file
     with open("test/login_time.txt", "w") as f:
         f.write(f"{user_login}|{final_date}|{ist_time}")
-    print(f"Good Morning {first_name}! 😊 Your login has been recorded at {ist_time}")
-    print("Run: git commit and push here if you want")
+    print(f"Good Morning @{first_name}! 😊 Your login has been recorded at {ist_time}")
 elif '/logout' in comment_body:
     # Read existing login 
     try:
@@ -41,8 +40,7 @@ elif '/logout' in comment_body:
         with open("test/attendance.md", "a") as f:
             f.write(f"| {user_login} | {final_date} | {login_time} | {ist_time} | {work_hours} |\n")
         os.remove("test/login_time.txt")
-        print(f"See You Tomorrow, {first_name}! ;) Your logout has been recorded at {ist_time}. Work hours: {work_hours}")
-        print("Run: git commit and push here if you want")
+        print(f"See You Tomorrow, @{first_name}!😉 Your logout has been recorded at {ist_time}. Work hours: {work_hours}")
     except FileNotFoundError:
         print("Login file not found!")
 else:

@@ -25,12 +25,11 @@ jobs:
           CREATED_AT: ${{ github.event.comment.created_at }}
         run: |
           python scripts/my_script.py
-          first_name= echo "$USER_LOGIN" | cut -d '-' -f 1 >> $GITHUB_OUTPUT
+          first_name= echo "$USER_LOGIN" | cut -d '-' -f 1 >> "$GITHUB_OUTPUT"
           epoch_seconds=$(date -d "$RAW_TIMESTAMP" +%s)
           ist_seconds=$((epoch_seconds + 19800))
           ist_time=$(date -u -d "@$ist_seconds" "+%H:%M")
-          final_date=$(date -d "$RAW_TIMESTAMP" "+%d-%m-%Y")
-          echo "timestamp=$ist_time" >> $GITHUB_OUTPUT
+          echo "timestamp=$ist_time" >> "$GITHUB_OUTPUT"
 
 
       - name: Post login comment
