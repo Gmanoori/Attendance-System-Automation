@@ -24,6 +24,10 @@ if '/login' in comment_body:
     with open("test/login_time.txt", "w") as f:
         f.write(f"{user_login}|{final_date}|{ist_time}")
     print(f"Good Morning @{first_name}! 😊 Your login has been recorded at {ist_time}")
+    # Set GitHub Actions outputs
+    with open(os.environ.get('GITHUB_OUTPUT', ''), 'a') as f:
+        f.write(f"first_name={first_name}\n")
+        f.write(f"timestamp={ist_time}\n")
 elif '/logout' in comment_body:
     # Read existing login 
     try:
@@ -41,6 +45,11 @@ elif '/logout' in comment_body:
             f.write(f"| {user_login} | {final_date} | {login_time} | {ist_time} | {work_hours} |\n")
         os.remove("test/login_time.txt")
         print(f"See You Tomorrow, @{first_name}!😉 Your logout has been recorded at {ist_time}. Work hours: {work_hours}")
+        # Set GitHub Actions outputs
+        with open(os.environ.get('GITHUB_OUTPUT', ''), 'a') as f:
+            f.write(f"first_name={first_name}\n")
+            f.write(f"timestamp={ist_time}\n")
+            f.write(f"work_hours={work_hours}\n")
     except FileNotFoundError:
         print("Login file not found!")
 else:
