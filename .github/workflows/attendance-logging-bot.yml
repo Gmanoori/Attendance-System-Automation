@@ -23,17 +23,11 @@ jobs:
           USER_LOGIN: ${{ github.event.comment.user.login }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           CREATED_AT: ${{ github.event.comment.created_at }}
-        run: |
-          python scripts/my_script.py
-          first_name= echo "$USER_LOGIN" | cut -d '-' -f 1 >> "$GITHUB_OUTPUT"
-          epoch_seconds=$(date -d "$RAW_TIMESTAMP" +%s)
-          ist_seconds=$((epoch_seconds + 19800))
-          ist_time=$(date -u -d "@$ist_seconds" "+%H:%M")
-          echo "timestamp=$ist_time" >> "$GITHUB_OUTPUT"
+        run: python scripts/my_script.py
 
 
       - name: Post login comment
-        if: ${{ env.COMMENT_BODY }} == "/login"
+        if: contains(github.event.comment.body, '/login')
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.issue.number }}
@@ -41,7 +35,7 @@ jobs:
             Good Morning @${{ steps.get_essentials.outputs.first_name }}! 😊 Your login has been recorded at ${{ steps.get_essentials.outputs.timestamp }}.
 
       - name: Post logout comment
-        if: ${{ env.COMMENT_BODY }} == "/logout"
+        if: contains(github.event.comment.body, '/logout')
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.issue.number }}
