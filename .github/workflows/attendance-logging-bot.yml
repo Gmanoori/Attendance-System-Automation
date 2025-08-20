@@ -32,7 +32,7 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            Good Morning @${{ steps.get_essentials.outputs.first_name }}! 😊 Your login has been recorded at ${{ steps.get_essentials.outputs.timestamp }}.
+            Good Morning @${{ env.USER_LOGIN }}! 😊 Your login has been recorded at ${{ steps.get_essentials.outputs.timestamp }}.
 
       - name: Post logout comment
         if: contains(github.event.comment.body, '/logout')
@@ -40,7 +40,7 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            See You Tomorrow, @${{ steps.get_essentials.outputs.first_name }}! 😉 Your logout has been recorded at ${{ steps.get_essentials.outputs.timestamp }}. 
+            See You Tomorrow, @${{ env.USER_LOGIN }}! 😉 Your logout has been recorded at ${{ steps.get_essentials.outputs.timestamp }}. 
 
       - name: Get formatted date
         id: get_timestamp
