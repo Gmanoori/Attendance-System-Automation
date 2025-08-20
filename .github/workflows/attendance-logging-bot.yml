@@ -41,7 +41,7 @@ jobs:
             Good Morning @${{ steps.get_essentials.outputs.first_name }}! :D Your login has been recorded at ${{ steps.get_essentials.outputs.timestamp }} 
 
       - name: Post logout comment
-        if: steps.check_command.outputs.command == 'logout'
+        if: ${{ env.COMMENT_BODY }} == "/logout"
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.issue.number }}
