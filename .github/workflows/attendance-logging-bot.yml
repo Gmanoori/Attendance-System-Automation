@@ -76,6 +76,15 @@ jobs:
           git commit -m "Save login time for ${{ steps.get_timestamp.outputs.final_date }}" || echo "No changes to commit"
           git push
 
+      - name: Execute Python script with environment variable
+        env:
+          MY_VARIABLE: "Hello from GitHub Actions!"
+          LOGIN_TIME: ${{ steps.save_login.outputs.login_time }}
+          LOGOUT_TIME: ${{ steps.get_timestamp.outputs.timestamp }}
+          FIRST_NAME: ${{ steps.check_command.outputs.first_name }}
+          FINAL_DATE: ${{ steps.get_timestamp.outputs.final_date }}
+        run: python scripts/my_script.py
+
 #        run: |
 #          echo "login_time=${{ steps.get_timestamp.outputs.timestamp }}" >> $GITHUB_OUTPUT
 #          echo "Saved"
