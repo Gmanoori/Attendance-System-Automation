@@ -23,10 +23,10 @@ if '/login' in comment_body:
     # Save login to file
     with open("test/login_time.txt", "w") as f:
         f.write(f"{user_login}|{final_date}|{ist_time}")
-    print(f"Good Morning {first_name}! :D Your login has been recorded at {ist_time}")
+    print(f"Good Morning {first_name}! 😊 Your login has been recorded at {ist_time}")
     print("Run: git commit and push here if you want")
 elif '/logout' in comment_body:
-    # Read existing login
+    # Read existing login 
     try:
         with open("test/login_time.txt", "r") as f:
             login_data = f.read().strip().split("|")
