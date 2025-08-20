@@ -22,6 +22,7 @@ jobs:
           COMMENT_BODY: ${{ github.event.comment.body }}
           USER_LOGIN: ${{ github.event.comment.user.login }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
+          CREATED_AT: ${{ github.event.comment.created_at }}
         run: |
           python scripts/my_script.py
           first_name= echo "$USER_LOGIN" | cut -d '-' -f 1 >> $GITHUB_OUTPUT
