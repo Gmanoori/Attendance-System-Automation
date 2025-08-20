@@ -69,6 +69,7 @@ jobs:
         id: save_login
         if: steps.check_command.outputs.command == 'login'
         run: |
+          echo "login_time=${{ steps.get_timestamp.outputs.timestamp }}" >> $GITHUB_OUTPUT
           echo "${{ steps.check_command.outputs.first_name }}|${{ steps.get_timestamp.outputs.final_date }}|${{ steps.get_timestamp.outputs.timestamp }}" > test/login_time.txt
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -77,6 +78,8 @@ jobs:
           git push
 
       - name: Execute Python script with environment variable
+        id: run_script 
+        if: steps.check_command.outputs.command == 'login' || steps.check_command.outputs.command == 'logout'
         env:
           MY_VARIABLE: "Hello from GitHub Actions!"
           LOGIN_TIME: ${{ steps.save_login.outputs.login_time }}
