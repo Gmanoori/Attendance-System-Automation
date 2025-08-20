@@ -7,6 +7,6 @@ login_time = os.environ.get("LOGIN_TIME")
 
 if my_variable_value:
     print(f"The variable from GitHub Actions is: {my_variable_value}")
-    print(login_time)
+    print({login_time})
 else:
     print("MY_VARIABLE not found in environment.")
