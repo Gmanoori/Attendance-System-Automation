@@ -71,7 +71,7 @@ jobs:
         if: steps.check_command.outputs.command == 'login'
         run: |
           echo "login_time=${{ steps.get_timestamp.outputs.timestamp }}" >> $GITHUB_OUTPUT
-          echo "${{ steps.check_command.outputs.first_name }}|${{ steps.get_timestamp.outputs.final_date }}|${{ steps.get_timestamp.outputs.timestamp }}" > test/login_time.txt
+          echo "${{ steps.check_command.outputs.full_name }}|${{ steps.get_timestamp.outputs.final_date }}|${{ steps.get_timestamp.outputs.timestamp }}" > test/login_time.txt
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add test/login_time.txt
@@ -90,6 +90,7 @@ jobs:
           LOGOUT_TIME: ${{ steps.get_timestamp.outputs.timestamp }}
           FIRST_NAME: ${{ steps.check_command.outputs.first_name }}
           FINAL_DATE: ${{ steps.get_timestamp.outputs.final_date }}
+          FULL_NAME: ${{ steps.check_command.outputs.full_name }}
         run: |
           echo "logout_time=${{ steps.get_timestamp.outputs.timestamp }}" >> $GITHUB_OUTPUT
           cat test/login_time.txt
@@ -115,6 +116,7 @@ jobs:
           LOGOUT_TIME: ${{ steps.read_login_and_logout.outputs.logout_time }}
           FIRST_NAME: ${{ steps.check_command.outputs.first_name }}
           FINAL_DATE: ${{ steps.get_timestamp.outputs.final_date }}
+          FULL_NAME: ${{ steps.check_command.outputs.full_name }}
         run: python scripts/my_script.py
 
 
