@@ -107,9 +107,21 @@ jobs:
           git push
           git pull origin master
 
-      - name: Execute Python script with environment variable
-        id: run_script 
-        if: steps.check_command.outputs.command == 'login' || steps.check_command.outputs.command == 'logout'
+      - name: Execute Python script for login
+        id: run_login_script 
+        if: steps.check_command.outputs.command == 'login'
+        env:
+          MY_VARIABLE: "Hello from GitHub Actions!"
+          LOGIN_TIME: ${{ steps.save_login.outputs.login_time }}
+          LOGOUT_TIME: ${{ steps.read_login_and_logout.outputs.logout_time }}
+          FIRST_NAME: ${{ steps.check_command.outputs.first_name }}
+          FINAL_DATE: ${{ steps.get_timestamp.outputs.final_date }}
+          FULL_NAME: ${{ steps.check_command.outputs.full_name }}
+        run: python scripts/my_script.py
+
+      - name: Execute Python script for logout
+        id: run_logout_script
+        if: steps.check_command.outputs.command == 'logout'
         env:
           MY_VARIABLE: "Hello from GitHub Actions!"
           LOGIN_TIME: ${{ steps.read_login_and_logout.outputs.login_time }}
@@ -118,6 +130,8 @@ jobs:
           FINAL_DATE: ${{ steps.get_timestamp.outputs.final_date }}
           FULL_NAME: ${{ steps.check_command.outputs.full_name }}
         run: python scripts/my_script.py
+
+
 
 
 #      - name: Write to attendance.md at logout
