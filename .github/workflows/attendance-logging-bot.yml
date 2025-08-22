@@ -17,14 +17,31 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run attendance script
+        id: get_essentials
         env:
           COMMENT_BODY: ${{ github.event.comment.body }}
           USER_LOGIN: ${{ github.event.comment.user.login }}
-          CREATED_AT: ${{ github.event.comment.created_at }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
+          CREATED_AT: ${{ github.event.comment.created_at }}
         run: python scripts/my_script.py
-      
-        # post comment after login, logout
+
+
+      - name: Post login comment
+        if: contains(github.event.comment.body, '/login')
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Good Morning @${{ github.event.comment.user.login }}! 😊 Your login has been recorded at ${{ steps.get_essentials.outputs.timestamp }}.
+
+      - name: Post logout comment
+        if: contains(github.event.comment.body, '/logout')
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            See You Tomorrow, @${{ github.event.comment.user.login }}! 😉 Your logout has been recorded at ${{ steps.get_essentials.outputs.timestamp }}.
+
       - name: Get formatted date
         id: get_timestamp
         run: echo "final_date=$(date +'%d-%m-%Y')" >> "$GITHUB_OUTPUT"
@@ -33,7 +50,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add test/attendance.md
+          git add .
           git commit -m "Added attendance for ${{ steps.get_timestamp.outputs.final_date }}" || echo "No changes to commit"
           git push
           git pull origin master
