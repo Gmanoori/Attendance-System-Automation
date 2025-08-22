@@ -61,6 +61,9 @@ elif '/break' in comment_body:
         break_stop = datetime.strptime(ist_time, fmt)
         break_time = break_stop - break_start
         print(f"Welcome back {first_name}! Your break has ended at {ist_time}. Break duration: {break_time}.")
+        # Save break_time to file
+        with open("test/break_time.txt", "w") as f:
+            f.write(str(break_time.total_seconds()))
     else:
         print(f"Welcome back {first_name}! Your break has ended at {ist_time}.")
 elif '/logout' in comment_body:
@@ -73,12 +76,21 @@ elif '/logout' in comment_body:
         fmt = "%H:%M"
         login_dt = datetime.strptime(login_time, fmt)
         logout_dt = datetime.strptime(ist_time, fmt)
-        diff = (logout_dt - login_dt - break_time) if 'break_time' in locals() else (logout_dt - login_dt)
+        # Read break_time from file if exists
+        break_seconds = 0
+        break_time_path = "test/break_time.txt"
+        if os.path.exists(break_time_path):
+            with open(break_time_path, "r") as f:
+                break_seconds = float(f.read().strip())
+        diff = (logout_dt - login_dt) - timedelta(seconds=break_seconds)
         work_hours = f"{diff.seconds//3600:02d}:{(diff.seconds//60)%60:02d}"
         # Save attendance
         with open("test/attendance.md", "a") as f:
             f.write(f"| {user_login} | {final_date} | {login_time} | {ist_time} | {work_hours} |\n")
         os.remove("test/login_time.txt")
+        # Optionally remove break_time file
+        if os.path.exists(break_time_path):
+            os.remove(break_time_path)
         print(f"See You Tomorrow, @{first_name}!😉 Your logout has been recorded at {ist_time}. Work hours: {work_hours}")
         # Set GitHub Actions outputs
         with open(os.environ.get('GITHUB_OUTPUT', ''), 'a') as f:
