@@ -35,7 +35,7 @@ elif '/logout' in comment_body:
         fmt = "%H:%M"
         login_dt = datetime.strptime(login_time, fmt)
         logout_dt = datetime.strptime(ist_time, fmt)
-        diff = (logout_dt - login_dt)
+        diff = (logout_dt - login_dt - break_time) if 'break_time' in locals() else (logout_dt - login_dt)
         work_hours = f"{diff.seconds//3600:02d}:{(diff.seconds//60)%60:02d}"
         # Save attendance
         with open("test/attendance.md", "a") as f:
@@ -45,5 +45,40 @@ elif '/logout' in comment_body:
         print("Run: git commit and push here if you want")
     except FileNotFoundError:
         print("Login file not found!")
+        # --- Handle break command ---
+elif '/break' in comment_body:
+    break_log_path = "test/break_log.txt"
+    # Count previous breaks for this user and date
+    break_count = 0
+    last_start_time = None
+    if os.path.exists(break_log_path):
+        with open(break_log_path, "r") as f:
+            for line in f:
+                parts = line.strip().split("|")
+                if len(parts) == 4 and parts[0] == user_login and parts[1] == final_date:
+                    break_count += 1
+                    if parts[3] == "start":
+                        last_start_time = parts[2]
+
+    # Odd count: start break, Even count: stop break
+    if break_count % 2 == 0:
+    # Start break
+        with open(break_log_path, "a") as f:
+            f.write(f"{user_login}|{final_date}|{ist_time}|start\n")
+            print(f"Hello {first_name}, your break has started at {ist_time}. Enjoy your time off! :)")
+    else:
+    # Stop break
+        with open(break_log_path, "a") as f:
+            f.write(f"{user_login}|{final_date}|{ist_time}|stop\n")
+    
+    # Calculate break_time
+    if last_start_time:
+        fmt = "%H:%M"
+        break_start = datetime.strptime(last_start_time, fmt)
+        break_stop = datetime.strptime(ist_time, fmt)
+        break_time = break_stop - break_start
+        print(f"Welcome back {first_name}! Your break has ended at {ist_time}. Break duration: {break_time}.")
+    else:
+        print(f"Welcome back {first_name}! Your break has ended at {ist_time}.")
 else:
     print("No login/logout command detected.")
