@@ -1,14 +1,14 @@
 ## Attendance System Automation with GitHub Actions
-This repository contains an automated attendance tracking system implemented using GitHub Actions. The system logs user login and logout times as markdown entries in a version-controlled attendance file, enabling simple yet effective attendance tracking directly within a GitHub repository.
+This repository contains an automated attendance tracking system implemented using GitHub Actions. The system logs user login and logout times with break logs as markdown entries in a version-controlled attendance file, enabling simple yet effective attendance tracking directly within a GitHub repository.
 
 ## Features
 - Automated recording of login and logout timestamps for users.
 
 - Stores attendance data as markdown tables (attendance.md), easily readable and maintainable.
 
-- Uses GitHub Actions workflows to automate updates on each login/logout event.
+- Uses GitHub Actions workflows to automate updates on each login/logout/break event.
 
-- Calculates and records work hours based on login/logout times.
+- Calculates and records work hours based on login/logout/break times.
 
 - Maintains a clean history of attendance records in the repository with automated commits and pushes.
 
