@@ -59,7 +59,7 @@ elif '/break' in comment_body:
     break_count = 0
     last_start_time = None
     if os.path.exists(break_log_path):
-        with open(break_log_path, "r") as f:
+        with open(break_log_path, "r") as f:jgvf
             for line in f:
                 parts = line.strip().split("|")
                 if len(parts) == 4 and parts[0] == user_login and parts[1] == final_date:
