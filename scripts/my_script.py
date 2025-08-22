@@ -28,38 +28,14 @@ if '/login' in comment_body:
     with open(os.environ.get('GITHUB_OUTPUT', ''), 'a') as f:
         f.write(f"first_name={first_name}\n")
         f.write(f"timestamp={ist_time}\n")
-elif '/logout' in comment_body:
-    # Read existing login 
-    try:
-        with open("test/login_time.txt", "r") as f:
-            login_data = f.read().strip().split("|")
-            login_user, login_date, login_time = login_data
-        # Calculate work hours
-        fmt = "%H:%M"
-        login_dt = datetime.strptime(login_time, fmt)
-        logout_dt = datetime.strptime(ist_time, fmt)
-        diff = (logout_dt - login_dt - break_time) if 'break_time' in locals() else (logout_dt - login_dt)
-        work_hours = f"{diff.seconds//3600:02d}:{(diff.seconds//60)%60:02d}"
-        # Save attendance
-        with open("test/attendance.md", "a") as f:
-            f.write(f"| {user_login} | {final_date} | {login_time} | {ist_time} | {work_hours} |\n")
-        os.remove("test/login_time.txt")
-        print(f"See You Tomorrow, @{first_name}!😉 Your logout has been recorded at {ist_time}. Work hours: {work_hours}")
-        # Set GitHub Actions outputs
-        with open(os.environ.get('GITHUB_OUTPUT', ''), 'a') as f:
-            f.write(f"first_name={first_name}\n")
-            f.write(f"timestamp={ist_time}\n")
-            f.write(f"work_hours={work_hours}\n")
-    except FileNotFoundError:
-        print("Login file not found!")
-        # --- Handle break command ---
+# --- Handle break command ---
 elif '/break' in comment_body:
     break_log_path = "test/break_log.txt"
     # Count previous breaks for this user and date
     break_count = 0
     last_start_time = None
     if os.path.exists(break_log_path):
-        with open(break_log_path, "r") as f:jgvf
+        with open(break_log_path, "r") as f:
             for line in f:
                 parts = line.strip().split("|")
                 if len(parts) == 4 and parts[0] == user_login and parts[1] == final_date:
@@ -87,5 +63,29 @@ elif '/break' in comment_body:
         print(f"Welcome back {first_name}! Your break has ended at {ist_time}. Break duration: {break_time}.")
     else:
         print(f"Welcome back {first_name}! Your break has ended at {ist_time}.")
+elif '/logout' in comment_body:
+    # Read existing login 
+    try:
+        with open("test/login_time.txt", "r") as f:
+            login_data = f.read().strip().split("|")
+            login_user, login_date, login_time = login_data
+        # Calculate work hours
+        fmt = "%H:%M"
+        login_dt = datetime.strptime(login_time, fmt)
+        logout_dt = datetime.strptime(ist_time, fmt)
+        diff = (logout_dt - login_dt - break_time) if 'break_time' in locals() else (logout_dt - login_dt)
+        work_hours = f"{diff.seconds//3600:02d}:{(diff.seconds//60)%60:02d}"
+        # Save attendance
+        with open("test/attendance.md", "a") as f:
+            f.write(f"| {user_login} | {final_date} | {login_time} | {ist_time} | {work_hours} |\n")
+        os.remove("test/login_time.txt")
+        print(f"See You Tomorrow, @{first_name}!😉 Your logout has been recorded at {ist_time}. Work hours: {work_hours}")
+        # Set GitHub Actions outputs
+        with open(os.environ.get('GITHUB_OUTPUT', ''), 'a') as f:
+            f.write(f"first_name={first_name}\n")
+            f.write(f"timestamp={ist_time}\n")
+            f.write(f"work_hours={work_hours}\n")
+    except FileNotFoundError:
+        print("Login file not found!")
 else:
     print("No login/logout command detected.")
