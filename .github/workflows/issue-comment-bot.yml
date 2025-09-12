@@ -1,7 +1,7 @@
 name: Issue Comment Checklist Bot
 
 on:
-  branches: main
+  branches: main  # Is disabled currently; enable by changing to master when needed
   issue_comment:
     types: [created]
 
