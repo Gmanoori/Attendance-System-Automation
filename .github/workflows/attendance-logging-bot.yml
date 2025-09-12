@@ -35,15 +35,6 @@ jobs:
             Good Morning @${{ github.event.comment.user.login }}! 😊 Your login has been recorded at ${{ steps.get_essentials.outputs.timestamp }}.
 
 
-      - name: Post break comment
-        if: contains(github.event.comment.body, '/break')
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            Enjoy your break @${{ github.event.comment.user.login }}! 😊.
-
-
       - name: Post logout comment
         if: contains(github.event.comment.body, '/logout')
         uses: peter-evans/create-or-update-comment@v4
