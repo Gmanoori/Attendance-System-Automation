@@ -25,7 +25,6 @@ jobs:
           CREATED_AT: ${{ github.event.comment.created_at }}
         run: python scripts/my_script.py
 
-
       - name: Post login comment
         if: contains(github.event.comment.body, '/login')
         uses: peter-evans/create-or-update-comment@v4
@@ -33,8 +32,24 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: |
             Good Morning @${{ github.event.comment.user.login }}! 😊 Your login has been recorded at ${{ steps.get_essentials.outputs.timestamp }}.
+      
+      - name: Post break start comment
+        if: steps.get_essentials.outputs.break_status == 'start'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Enjoy your break @${{ github.event.comment.user.login }}! 😊.
 
-
+      - name: Post break end comment
+        if: steps.get_essentials.outputs.break_status == 'end'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Welcome back @${{ github.event.comment.user.login }}! Your break has ended.  
+            
+            
       - name: Post logout comment
         if: contains(github.event.comment.body, '/logout')
         uses: peter-evans/create-or-update-comment@v4
@@ -56,18 +71,4 @@ jobs:
           git push
           git pull origin master
 
-      - name: Post break start comment
-        if: steps.get_essentials.outputs.break_status == 'start'
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            Enjoy your break @${{ github.event.comment.user.login }}! 😊.
-
-      - name: Post break end comment
-        if: steps.get_essentials.outputs.break_status == 'end'
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            Welcome back @${{ github.event.comment.user.login }}! Your break has ended.
+      
