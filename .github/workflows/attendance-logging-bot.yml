@@ -42,7 +42,7 @@ jobs:
             Enjoy your break @${{ github.event.comment.user.login }}! 😊.
 
       - name: Post break end comment
-        if: steps.get_essentials.outputs.break_status == 'end'
+        if: steps.get_essentials.outputs.break_status == 'stop'
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.issue.number }}
