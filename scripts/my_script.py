@@ -45,12 +45,12 @@ elif '/break' in comment_body:
 
     # Odd count: start break, Even count: stop break
     if break_count % 2 == 0:
-    # Start break
+        # Start break
         with open(break_log_path, "a") as f:
             f.write(f"{user_login}|{final_date}|{ist_time}|start\n")
             print(f"Hello {first_name}, your break has started at {ist_time}. Enjoy your time off! :)")
     else:
-    # Stop break
+        # Stop break
         with open(break_log_path, "a") as f:
             f.write(f"{user_login}|{final_date}|{ist_time}|stop\n")
     
@@ -66,6 +66,8 @@ elif '/break' in comment_body:
             f.write(str(break_time.total_seconds()))
     else:
         print(f"Welcome back {first_name}! Your break has ended at {ist_time}.")
+    with open(os.environ.get('GITHUB_OUTPUT', ''), 'a') as f:
+        f.write(f"break_status={break_status}\n")
 elif '/logout' in comment_body:
     # Read existing login 
     try:
