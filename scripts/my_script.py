@@ -46,11 +46,13 @@ elif '/break' in comment_body:
     # Odd count: start break, Even count: stop break
     if break_count % 2 == 0:
         # Start break
+        break_status = "start"
         with open(break_log_path, "a") as f:
             f.write(f"{user_login}|{final_date}|{ist_time}|start\n")
             print(f"Hello {first_name}, your break has started at {ist_time}. Enjoy your time off! :)")
     else:
         # Stop break
+        break_status = "stop"
         with open(break_log_path, "a") as f:
             f.write(f"{user_login}|{final_date}|{ist_time}|stop\n")
     
